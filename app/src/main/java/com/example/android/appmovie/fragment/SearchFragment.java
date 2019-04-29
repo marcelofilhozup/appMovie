@@ -65,7 +65,7 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
 
         backButton = v.findViewById(R.id.back_search);
         progressBar = v.findViewById(R.id.progress_bar);
-        loadingBar = v.findViewById(R.id.progress_bar_search_loading);
+        
 
         searchFragmentViewModel =  ViewModelProviders.of(this).get(SearchFragmentViewModel.class);
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
@@ -102,9 +102,9 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
                     @Override
                     public void run() {
                         titleMovie = editText.getText().toString();
-                        ;
+
                         searchFragmentViewModel.init(editText.getText().toString(),"1");
-                        
+
                     }
                 }, 750);
             }
