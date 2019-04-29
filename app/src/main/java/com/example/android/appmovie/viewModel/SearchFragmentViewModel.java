@@ -22,10 +22,10 @@ public class SearchFragmentViewModel extends AndroidViewModel {
 
     }
 
-    public void init(String name) {
+    public void init(String name, String page) {
 
        ;
-        homeRepository.getMovieList(name).observeForever(new Observer<ListMovie>() {
+        homeRepository.getMovieList(name,page).observeForever(new Observer<ListMovie>() {
             @Override
             public void onChanged(@Nullable ListMovie listMovie) {
                 getListMovie().setValue(listMovie);

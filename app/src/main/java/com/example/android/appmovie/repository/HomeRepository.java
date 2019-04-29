@@ -17,11 +17,10 @@ public class HomeRepository {
 
 
 
-    public LiveData<ListMovie> getMovieList(String name) {
+    public LiveData<ListMovie> getMovieList(String name,String page) {
 
-        System.out.println("PRINTANDOOO GET MOIVEEE LSIT ---------");
-        System.out.println(name);
-        Call<ListMovie> call = new RetrofitConfig().getMovieService().getListMovie(name);
+
+        Call<ListMovie> call = new RetrofitConfig().getMovieService().getListMovie(name,page);
         final MutableLiveData<ListMovie> data = new MutableLiveData<>();
 
         call.enqueue(new Callback<ListMovie>() {

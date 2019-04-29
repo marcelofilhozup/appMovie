@@ -13,15 +13,12 @@ public interface MovieService {
 
 
     @GET("search/movie")
-    Call<ListMovie> getListMovie(@Query("query") String name);
+    Call<ListMovie> getListMovie(@Query("query") String name,@Query("page") String page);
 
     @GET("movie/{movie_id}/similar")
     Call<ListMovie> getListMovieDetail(@Path("movie_id") String movie_id);
 
-
     @GET("movie/{movie_id}")
     Call<MovieDetail> getDetailMovie(@Path("movie_id") String movie_id);
 
-    @GET("users/{email}/favorits")
-    Call<ListMovie> getFavoriteMovie(@Path("email") String email);
 }

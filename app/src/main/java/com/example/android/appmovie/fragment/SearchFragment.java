@@ -17,11 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.appmovie.Interface.OnInsertFavorite;
 import com.example.android.appmovie.Interface.OnOpenDetailMovie;
+import com.example.android.appmovie.Utility.PaginationScrollListener;
 import com.example.android.appmovie.activity.MovieDetailActivity;
 import com.example.android.appmovie.adapter.ListMovieAdapter;
 import com.example.android.appmovie.R;
@@ -39,13 +41,17 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
     private SearchFragmentViewModel searchFragmentViewModel;
     private TextView textView;
     private EditText editText;
-    Toast mytoast;
+    Toast toast;
+    private boolean isLoading = false;
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView mRecyclerView;
     private RoomViewModel roomViewModel;
     private ImageView backButton;
     private ListMovieAdapter mAdapter;
     private Timer timer;
+    private ProgressBar progressBar,loadingBar;
+    private int page =1;
+    private String titleMovie;
     public static final String EXTRA_MESSAGE_OBJECT =
             "ID";
 
@@ -58,16 +64,18 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         editText = v.findViewById(R.id.edit_search);
 
         backButton = v.findViewById(R.id.back_search);
+        progressBar = v.findViewById(R.id.progress_bar);
+        loadingBar = v.findViewById(R.id.progress_bar_search_loading);
 
         searchFragmentViewModel =  ViewModelProviders.of(this).get(SearchFragmentViewModel.class);
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
 
         View layouttoast = inflater.inflate(R.layout.toast_favorit_insert,(ViewGroup)v.findViewById(R.id.toast_layout));
 
-        mytoast = new Toast(getActivity());
-        mytoast.setGravity(Gravity.CENTER,0,0);
-        mytoast.setView(layouttoast);
-        mytoast.setDuration(Toast.LENGTH_LONG);
+//        mytoast = new Toast(getActivity());
+//        mytoast.setGravity(Gravity.CENTER,0,0);
+//        mytoast.setView(layouttoast);
+//        mytoast.setDuration(Toast.LENGTH_LONG);
 
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -93,7 +101,10 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        searchFragmentViewModel.init(editText.getText().toString());
+                        titleMovie = editText.getText().toString();
+                        ;
+                        searchFragmentViewModel.init(editText.getText().toString(),"1");
+                        
                     }
                 }, 750);
             }
@@ -110,6 +121,33 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         mAdapter.setInsertFavorite(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        mRecyclerView.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+               progressBar.setVisibility(View.VISIBLE);
+                page++;
+                System.out.println("CHEGOU NO FINAL NA LISTAAA ------------*!");
+                searchFragmentViewModel.init(titleMovie,String.valueOf(page));
+
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return 10;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return false;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
         return v;
     }
 
@@ -117,8 +155,22 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         @Override
         public void onChanged(@Nullable ListMovie movieList) {
 
-            if(movieList!=null)
-            mAdapter.setMovieList(movieList);
+
+            if (page==1){
+                mAdapter.setMovieList(movieList);
+                mAdapter.addLoadingFooter();
+            }
+
+            else if(page>1) {
+                mAdapter.removeLoadingFooter();
+                mAdapter.addAll(movieList);
+                mAdapter.addLoadingFooter();
+            }
+
+//
+
+            isLoading = false;
+            progressBar.setVisibility(View.INVISIBLE);
 
         }
     };
@@ -135,10 +187,21 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
     @Override
     public void insertFavorite(Movie movie) {
 
-        Toast.makeText(getActivity(), "Filme salvo nos favoritos",
-                Toast.LENGTH_LONG);
-        mytoast.show();
+       toast= Toast.makeText(getActivity(),
+                "Filmes adicionado aos favoritos", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
+        toast.show();
+
 
         roomViewModel.insert(movie);
+    }
+
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
     }
 }

@@ -37,7 +37,7 @@ public class MovieDetailViewModel extends AndroidViewModel {
     public void initMovieList(String id) {
         System.out.println("PRINTANDO LISTA MOVIE DETAIL");
         System.out.println(id);
-        homeRepository.getMovieListDetail(id).observeForever(new Observer<ListMovie>() {
+        homeRepository.getMovieListDetail(id ).observeForever(new Observer<ListMovie>() {
             @Override
             public void onChanged(@Nullable ListMovie listMovie) {
                 getListMovie().setValue(listMovie);

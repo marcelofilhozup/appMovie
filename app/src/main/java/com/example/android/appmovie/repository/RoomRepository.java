@@ -18,11 +18,13 @@ public class RoomRepository {
     private MovieDAO movieDAO;
     private LiveData<List<Movie>> allMovie;
 
+
    public RoomRepository(Application application){
         FavoriteMovieDataBase db = FavoriteMovieDataBase.getDatabase(application);
 
         movieDAO = db.movieDAO();
         allMovie = movieDAO.getAllCompromissos();
+
     }
 
     public LiveData<List<Movie>> getAllCompromissos() {
@@ -30,6 +32,7 @@ public class RoomRepository {
         System.out.println("PRINTAD GEALL REPOSRIOTY");
        return allMovie;
     }
+
 
     public void insert (Movie movie) {
 

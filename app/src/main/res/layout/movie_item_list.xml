@@ -67,15 +67,13 @@
 
         <TextView
             android:id="@+id/movie_title"
-            android:layout_width="120dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="MHANK - SULLY"
             android:textColor=" #333338"
             android:textStyle="bold"
-
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
