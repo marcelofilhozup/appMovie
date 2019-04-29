@@ -65,17 +65,12 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
 
         backButton = v.findViewById(R.id.back_search);
         progressBar = v.findViewById(R.id.progress_bar);
-        
+
 
         searchFragmentViewModel =  ViewModelProviders.of(this).get(SearchFragmentViewModel.class);
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
 
-        View layouttoast = inflater.inflate(R.layout.toast_favorit_insert,(ViewGroup)v.findViewById(R.id.toast_layout));
 
-//        mytoast = new Toast(getActivity());
-//        mytoast.setGravity(Gravity.CENTER,0,0);
-//        mytoast.setView(layouttoast);
-//        mytoast.setDuration(Toast.LENGTH_LONG);
 
 
         editText.addTextChangedListener(new TextWatcher() {
