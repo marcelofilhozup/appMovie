@@ -4,19 +4,19 @@ import java.util.List;
 
 public class ListMovie {
 
-    private  List<Movie> results;
+    private  List<Movie> Search;
 
     public ListMovie(List<Movie> movie) {
-        this.results = movie;
+        this.Search = movie;
     }
 
     public List<Movie> getMovie() {
-        return results;
+        return Search;
     }
 
-    public void setMovie(List<Movie> result){
+    public void setMovie(List<Movie> search){
 
-        this.results = result;
+        this.Search = search;
 
     }
 }

@@ -60,10 +60,6 @@ public class HomeFragment extends Fragment implements OnDeleteMovie {
 
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
 
-
-
-
-
         Toolbar myToolbar = (Toolbar) v.findViewById(R.id.my_toolbar);
         titleActionBar = (TextView) v.findViewById(R.id.titleActionBar);
         titleActionBar.setText(Html.fromHtml(text));
@@ -73,17 +69,17 @@ public class HomeFragment extends Fragment implements OnDeleteMovie {
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        roomViewModel.getAllMovie().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(@Nullable final List<Movie> movieList) {
-                // Update the cached copy of the words in the adapter.
-                if(movieList==null){
-
-                }
-                mAdapter.setMovieList(movieList);
-
-            }
-        });
+//        roomViewModel.getAllMovie().observe(this, new Observer<List<Movie>>() {
+//            @Override
+//            public void onChanged(@Nullable final List<Movie> movieList) {
+//                // Update the cached copy of the words in the adapter.
+//                if(movieList==null){
+//
+//                }
+//                mAdapter.setMovieList(movieList);
+//
+//            }
+//        });
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mAdapter.setDeleteMovie(this);
         mRecyclerView.setAdapter(mAdapter);

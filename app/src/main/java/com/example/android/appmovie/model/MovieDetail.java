@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MovieDetail {
 
-    private String id;
+    private String imdbID;
     private String poster_path;
     private String backdrop_path;
     private String voteAverage;
@@ -23,11 +23,11 @@ public class MovieDetail {
     private List<String> countries;
 
     public String getId() {
-        return id;
+        return imdbID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String imdbID) {
+        this.imdbID = imdbID;
     }
 
     public String getPosterId() {

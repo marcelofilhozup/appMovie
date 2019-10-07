@@ -21,6 +21,6 @@ public interface MovieDAO {
     @Query("SELECT * from movie_table ORDER BY title ASC")
     LiveData<List<Movie>> getAllCompromissos();
 
-    @Query("DELETE FROM movie_table WHERE id = :idMovie")
+    @Query("DELETE FROM movie_table WHERE imdbID = :idMovie")
     void deleteMovie(String idMovie);
 }

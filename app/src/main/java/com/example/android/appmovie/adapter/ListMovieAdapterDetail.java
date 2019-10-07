@@ -89,10 +89,10 @@ public class ListMovieAdapterDetail extends  RecyclerView.Adapter<RecyclerView.V
             case ITEM:
                 final MovieViewHolderDetail movieViewHolder = (MovieViewHolderDetail) viewHolder;
 
-                String url = String.format("http://image.tmdb.org/t/p/w185//%s", movieList.getMovie().get(position).getPoster_path());
+                String url = String.format("http://image.tmdb.org/t/p/w185//%s", movieList.getMovie().get(position).getPoster());
 
                 movieViewHolder.movieTitle.setText(movieList.getMovie().get(position).getTitle());
-                movieViewHolder.movieYear.setText(movieList.getMovie().get(position).getRelease_date());
+                movieViewHolder.movieYear.setText(movieList.getMovie().get(position).getYear());
                 Picasso.with(context).load(url).into(movieViewHolder.imageMovie);
 //
 //                String genres = String.join(", ", movieList.getMovie().get(position).getGenreNames());
@@ -101,7 +101,7 @@ public class ListMovieAdapterDetail extends  RecyclerView.Adapter<RecyclerView.V
                 movieViewHolder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        openDetailMovie.openMovieDetail(movieList.getMovie().get(position).getId());
+//                        openDetailMovie.openMovieDetail(movieList.getMovie().get(position).getImdbID());
                     }
                 });
 

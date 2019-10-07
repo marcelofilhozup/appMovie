@@ -4,5 +4,5 @@ import com.example.android.appmovie.model.Movie;
 
 public interface OnDeleteMovie {
 
-    public void deleteMovie(String id);
+    public void deleteMovie(String imdbID);
 }

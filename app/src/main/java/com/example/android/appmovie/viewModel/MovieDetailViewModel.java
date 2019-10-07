@@ -9,35 +9,33 @@ import android.support.annotation.Nullable;
 
 import com.example.android.appmovie.model.ListMovie;
 import com.example.android.appmovie.model.MovieDetail;
-import com.example.android.appmovie.repository.HomeRepository;
+import com.example.android.appmovie.repository.HomeRepositoryImpl;
 
 public class MovieDetailViewModel extends AndroidViewModel {
 
-    private HomeRepository homeRepository;
+    private HomeRepositoryImpl homeRepositoryImpl;
     private MutableLiveData<MovieDetail> movieDetail = new MutableLiveData<>();
     private MutableLiveData<ListMovie> listMovie = new MutableLiveData<>();
 
     public MovieDetailViewModel(@NonNull Application application) {
         super(application);
-        this.homeRepository = new HomeRepository();
+        this.homeRepositoryImpl = new HomeRepositoryImpl();
     }
 
     public void init(String id) {
 
-        homeRepository.getMovieDetail(id).observeForever(new Observer<MovieDetail>() {
-            @Override
-            public void onChanged(@Nullable MovieDetail movieDetail) {
-                getMovieDetail().setValue(movieDetail);
-
-
-            }
-        });
+//        homeRepositoryImpl.getMovieDetail(id).observeForever(new Observer<MovieDetail>() {
+//            @Override
+//            public void onChanged(@Nullable MovieDetail movieDetail) {
+//                getMovieDetail().setValue(movieDetail);
+//
+//
+//            }
+//        });
     }
 
     public void initMovieList(String id) {
-        System.out.println("PRINTANDO LISTA MOVIE DETAIL");
-        System.out.println(id);
-        homeRepository.getMovieListDetail(id ).observeForever(new Observer<ListMovie>() {
+        homeRepositoryImpl.getMovieListDetail(id ).observeForever(new Observer<ListMovie>() {
             @Override
             public void onChanged(@Nullable ListMovie listMovie) {
                 getListMovie().setValue(listMovie);

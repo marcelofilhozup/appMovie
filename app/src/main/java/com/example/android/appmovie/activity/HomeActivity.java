@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import com.example.android.appmovie.fragment.HomeFragment;
 import com.example.android.appmovie.R;
-import com.example.android.appmovie.fragment.SearchFragment;
+import com.example.android.appmovie.Search.SearchFragment;
 
 public class HomeActivity extends AppCompatActivity {
 

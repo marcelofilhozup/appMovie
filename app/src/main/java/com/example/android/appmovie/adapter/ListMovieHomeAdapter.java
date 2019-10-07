@@ -13,10 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.appmovie.Interface.OnDeleteMovie;
-import com.example.android.appmovie.Interface.OnInsertFavorite;
-import com.example.android.appmovie.Interface.OnOpenDetailMovie;
 import com.example.android.appmovie.R;
-import com.example.android.appmovie.model.ListMovie;
 import com.example.android.appmovie.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -82,11 +79,11 @@ public class ListMovieHomeAdapter extends RecyclerView.Adapter<RecyclerView.View
             case ITEM:
                 final ListMovieHomeAdapter.MovieViewHomeHolder movieViewHolder = (ListMovieHomeAdapter.MovieViewHomeHolder) viewHolder;
 
-                url = String.format("http://image.tmdb.org/t/p/w185//%s", movieList.get(position).getPoster_path());
+                url = movieList.get(position).getPoster();
 
                 movieViewHolder.movieTitle.setText(movieList.get(position).getTitle());
                 movieViewHolder.movieOverView.setText(movieList.get(position).getOverview());
-                movieViewHolder.movieYear.setText(movieList.get(position).getRelease_date());
+                movieViewHolder.movieYear.setText(movieList.get(position).getYear());
                 movieViewHolder.movieVoteAverage.setText(movieList.get(position).getVote_average());
                 Picasso.with(context).load(url).into(movieViewHolder.imageMovie);
 //
@@ -99,8 +96,7 @@ public class ListMovieHomeAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
 
-                        deleteMovie.deleteMovie(movieList.get(position).getId());
-                        System.out.println("printando deletando *********---*******");
+                        deleteMovie.deleteMovie(movieList.get(position).getImdbID());
 
                     }
                 });

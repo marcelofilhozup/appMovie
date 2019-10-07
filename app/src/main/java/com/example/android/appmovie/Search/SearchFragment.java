@@ -1,6 +1,5 @@
-package com.example.android.appmovie.fragment;
+package com.example.android.appmovie.Search;
 
-import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.arch.lifecycle.ViewModelProviders;
@@ -24,18 +23,18 @@ import android.widget.Toast;
 import com.example.android.appmovie.Interface.OnInsertFavorite;
 import com.example.android.appmovie.Interface.OnOpenDetailMovie;
 import com.example.android.appmovie.Utility.PaginationScrollListener;
-import com.example.android.appmovie.activity.MovieDetailActivity;
 import com.example.android.appmovie.adapter.ListMovieAdapter;
 import com.example.android.appmovie.R;
 import com.example.android.appmovie.model.ListMovie;
 import com.example.android.appmovie.model.Movie;
+import com.example.android.appmovie.movie_detail.MovieDetailActivity;
 import com.example.android.appmovie.viewModel.RoomViewModel;
 import com.example.android.appmovie.viewModel.SearchFragmentViewModel;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInsertFavorite {
+public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInsertFavorite, SearchContract.View{
 
 
     private SearchFragmentViewModel searchFragmentViewModel;
@@ -49,11 +48,13 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
     private ImageView backButton;
     private ListMovieAdapter mAdapter;
     private Timer timer;
-    private ProgressBar progressBar,loadingBar;
+    private ProgressBar progressBar;
     private int page =1;
     private String titleMovie;
     public static final String EXTRA_MESSAGE_OBJECT =
             "ID";
+
+    private SearchContract.Presenter mPresenter;
 
     @Nullable
     @Override
@@ -66,9 +67,10 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         backButton = v.findViewById(R.id.back_search);
         progressBar = v.findViewById(R.id.progress_bar);
 
-
         searchFragmentViewModel =  ViewModelProviders.of(this).get(SearchFragmentViewModel.class);
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
+
+        mPresenter = new SearchPresenter(this);
 
 
 
@@ -98,7 +100,11 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
                     public void run() {
                         titleMovie = editText.getText().toString();
 
-                        searchFragmentViewModel.init(editText.getText().toString(),"1");
+//                        searchFragmentViewModel.init(editText.getText().toString(),"1");
+
+                        mPresenter.getListMovie(editText.getText().toString(),"1");
+
+
 
                     }
                 }, 750);
@@ -111,7 +117,7 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        searchFragmentViewModel.getListMovie().observe(this, observerMovieList);
+//        searchFragmentViewModel.getListMovie().observe(this, observerMovieList);
         mAdapter.setOpenDetailMovie(this);
         mAdapter.setInsertFavorite(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -120,10 +126,9 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
             @Override
             protected void loadMoreItems() {
                 isLoading = true;
-               progressBar.setVisibility(View.VISIBLE);
                 page++;
-                System.out.println("CHEGOU NO FINAL NA LISTAAA ------------*!");
-                searchFragmentViewModel.init(titleMovie,String.valueOf(page));
+//                searchFragmentViewModel.init(titleMovie,String.valueOf(page));
+                mPresenter.getListMovie(titleMovie,String.valueOf(page));
 
             }
 
@@ -146,29 +151,29 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         return v;
     }
 
-    Observer<ListMovie> observerMovieList= new Observer<ListMovie>() {
-        @Override
-        public void onChanged(@Nullable ListMovie movieList) {
-
-
-            if (page==1){
-                mAdapter.setMovieList(movieList);
-                mAdapter.addLoadingFooter();
-            }
-
-            else if(page>1) {
-                mAdapter.removeLoadingFooter();
-                mAdapter.addAll(movieList);
-                mAdapter.addLoadingFooter();
-            }
-
+//    Observer<ListMovie> observerMovieList= new Observer<ListMovie>() {
+//        @Override
+//        public void onChanged(@Nullable ListMovie movieList) {
 //
-
-            isLoading = false;
-            progressBar.setVisibility(View.INVISIBLE);
-
-        }
-    };
+//
+//            if (page==1){
+//                mAdapter.setMovieList(movieList);
+//                mAdapter.addLoadingFooter();
+//            }
+//
+//            else if(page>1) {
+//                mAdapter.removeLoadingFooter();
+//                mAdapter.addAll(movieList);
+//                mAdapter.addLoadingFooter();
+//            }
+//
+////
+//
+//            isLoading = false;
+//            progressBar.setVisibility(View.INVISIBLE);
+//
+//        }
+//    };
 
     @Override
     public void openMovieDetail(String id) {
@@ -198,5 +203,37 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
 
     public void setLoading(boolean loading) {
         isLoading = loading;
+    }
+
+    @Override
+    public void teste() {
+
+    }
+
+    @Override
+    public void setFirstPage(ListMovie listMovie) {
+        mAdapter.setMovieList(listMovie);
+        mAdapter.addLoadingFooter();
+        isLoading = false;
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void setOthersPage(ListMovie listMovie) {
+        mAdapter.removeLoadingFooter();
+        mAdapter.addAll(listMovie);
+        mAdapter.addLoadingFooter();
+        isLoading = false;
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.android.appmovie.activity;
+package com.example.android.appmovie.movie_detail;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -23,9 +23,9 @@ import com.example.android.appmovie.model.ListMovie;
 import com.example.android.appmovie.model.MovieDetail;
 import com.example.android.appmovie.viewModel.MovieDetailViewModel;
 
-public class MovieDetailActivity extends AppCompatActivity implements OnOpenDetailMovie {
+public class MovieDetailActivity extends AppCompatActivity implements OnOpenDetailMovie, MovieDetailContract.View {
 
-    private  String id;
+    private String id;
     int page = 1;
     TextView titleActionBar;
     private TextView description;
@@ -38,7 +38,7 @@ public class MovieDetailActivity extends AppCompatActivity implements OnOpenDeta
     private LinearLayoutManager linearLayoutManager;
     public static final String EXTRA_MESSAGE_OBJECT =
             "ID";
-
+    private MovieDetailContract.Presenter mPresenter;
 
 
     @Override
@@ -48,6 +48,7 @@ public class MovieDetailActivity extends AppCompatActivity implements OnOpenDeta
 
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_movie_detail);
+        mPresenter = new MovieDetailPresenter(this);
         setSupportActionBar(myToolbar);
         titleActionBar = (TextView) findViewById(R.id.titleActionBar_movie_detail);
         titleActionBar.setText(Html.fromHtml(text));
@@ -60,13 +61,15 @@ public class MovieDetailActivity extends AppCompatActivity implements OnOpenDeta
         movieDetailViewModel.init(String.valueOf(id));
         movieDetailViewModel.getMovieDetail().observe(this, observerMovieDetail);
 
+        mPresenter.getDetailMovie(id);
+
 
         mAdapter = new ListMovieAdapterDetail(this);
         mRecyclerView = findViewById(R.id.recyclerview_movie_detail);
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        movieDetailViewModel.getListMovie().observe(this, observerMovieList);
+//        movieDetailViewModel.getListMovie().observe(this, observerMovieList);
         mAdapter.setOpenDetailMovie(this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -117,29 +120,29 @@ public class MovieDetailActivity extends AppCompatActivity implements OnOpenDeta
         }
     };
 
-    Observer<ListMovie> observerMovieList= new Observer<ListMovie>() {
-        @Override
-        public void onChanged(@Nullable ListMovie movieList) {
-
-            System.out.println("ENTROOOU NO OBERSERVER MOVIEE LIEST");
-            if (page==1){
-                mAdapter.setMovieList(movieList);
-                mAdapter.addLoadingFooter();
-            }
-
-            else if(page>1) {
-                mAdapter.removeLoadingFooter();
-                mAdapter.addAll(movieList);
-                mAdapter.addLoadingFooter();
-            }
-
+//    Observer<ListMovie> observerMovieList= new Observer<ListMovie>() {
+//        @Override
+//        public void onChanged(@Nullable ListMovie movieList) {
 //
-
-            isLoading = false;
-
-
-        }
-    };
+//            System.out.println("ENTROOOU NO OBERSERVER MOVIEE LIEST");
+//            if (page==1){
+//                mAdapter.setMovieList(movieList);
+//                mAdapter.addLoadingFooter();
+//            }
+//
+//            else if(page>1) {
+//                mAdapter.removeLoadingFooter();
+//                mAdapter.addAll(movieList);
+//                mAdapter.addLoadingFooter();
+//            }
+//
+////
+//
+//            isLoading = false;
+//
+//
+//        }
+//    };
 
     public boolean isLoading() {
         return isLoading;
@@ -159,7 +162,42 @@ public class MovieDetailActivity extends AppCompatActivity implements OnOpenDeta
         startActivity(intent);
     }
 
-    public void back_activity(View view) {this.finish();
+    @Override
+    public void getDetailMovie(MovieDetail movieDetail) {
+        mAdapter.setMovieDetail(movieDetail);
     }
+
+
+    @Override
+    public void setFirstPage(ListMovie listMovie) {
+        mAdapter.setMovieList(listMovie);
+        mAdapter.addLoadingFooter();
+        isLoading = false;
+
+    }
+
+    @Override
+    public void setOthersPage(ListMovie listMovie) {
+        mAdapter.removeLoadingFooter();
+        mAdapter.addAll(listMovie);
+        mAdapter.addLoadingFooter();
+        isLoading = false;
+
+    }
+
+    public void back_activity(View view) {
+        this.finish();
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
 
 }

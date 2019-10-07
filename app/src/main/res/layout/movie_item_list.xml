@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/imagemMovie"
         android:layout_alignRight="@+id/imagemMovie"
-
         android:layout_alignBottom="@+id/imagemMovie"
         android:layout_marginEnd="-12dp"
         android:layout_marginRight="-12dp"
