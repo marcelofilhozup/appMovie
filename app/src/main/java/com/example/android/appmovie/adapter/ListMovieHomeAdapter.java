@@ -79,11 +79,11 @@ public class ListMovieHomeAdapter extends RecyclerView.Adapter<RecyclerView.View
             case ITEM:
                 final ListMovieHomeAdapter.MovieViewHomeHolder movieViewHolder = (ListMovieHomeAdapter.MovieViewHomeHolder) viewHolder;
 
-                url = movieList.get(position).getPoster();
+                url = String.format("http://image.tmdb.org/t/p/w185//%s", movieList.get(position).getPoster_path());
 
                 movieViewHolder.movieTitle.setText(movieList.get(position).getTitle());
                 movieViewHolder.movieOverView.setText(movieList.get(position).getOverview());
-                movieViewHolder.movieYear.setText(movieList.get(position).getYear());
+                movieViewHolder.movieYear.setText(movieList.get(position).getRelease_date());
                 movieViewHolder.movieVoteAverage.setText(movieList.get(position).getVote_average());
                 Picasso.with(context).load(url).into(movieViewHolder.imageMovie);
 //
@@ -96,7 +96,7 @@ public class ListMovieHomeAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
 
-                        deleteMovie.deleteMovie(movieList.get(position).getImdbID());
+                        deleteMovie.deleteMovie(movieList.get(position).getId());
 
                     }
                 });

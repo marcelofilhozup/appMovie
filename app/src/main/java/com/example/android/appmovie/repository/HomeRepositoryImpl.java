@@ -57,11 +57,28 @@ public class HomeRepositoryImpl implements HomeRepository {
 
     }
 
+    @Override
+    public void getMovieListDetail(String id, final MovieListaCallBack callBack) {
+        Call<ListMovie> call = new RetrofitConfig().getMovieService().getListMovieDetail(id);
+
+        call.enqueue(new Callback<ListMovie>() {
+            @Override
+            public void onResponse(Call<ListMovie> call, Response<ListMovie> response) {
+               callBack.onSuccess(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<ListMovie> call, Throwable t) {
+                Log.e("EMAILService", "Erro ao buscar o email:" + t.getMessage());
+            }
+        });
+    }
+
 
     public LiveData<ListMovie> getMovieListDetail(String id) {
 
-        System.out.println("PRITANDO DO REPOSITORY DETAIL ");
-        System.out.println(id);
+
         Call<ListMovie> call = new RetrofitConfig().getMovieService().getListMovieDetail(id);
         final MutableLiveData<ListMovie> data = new MutableLiveData<>();
 

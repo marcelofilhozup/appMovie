@@ -23,8 +23,6 @@ public class HomeActivity extends AppCompatActivity {
 
         Fragment fragment = new HomeFragment();
 
-
-
 //        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 //        setSupportActionBar(myToolbar);
 //        titleActionBar = (TextView) findViewById(R.id.titleActionBar);

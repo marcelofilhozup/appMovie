@@ -18,11 +18,11 @@ public class  RetrofitConfig {
     private final Retrofit retrofit;
     //private final Retrofit retrofitHome;
     public final static String VALUE_SERVICE =
-            "f3044abd";
+            "6ac69f9d8101f54784e9a9795baaab97";
     public final static String NAME_SERVICE =
-            "apikey";
+            "api_key";
     public final static String URL_SERVICE =
-            "http://www.omdbapi.com/";
+            "https://api.themoviedb.org/3/";
 
     private static String tokenHeader;
 

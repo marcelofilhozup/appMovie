@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AppMovie</string>
+    <string name="action_accept">Aceitar</string>
+    <string name="action_dimiss">Cancelar</string>
+    <string name="label_alert_dialog">Este filme irá ser adicionado aos já vistos</string>
+    <string name="label_description_dialog">Insira uma nota para ele</string>
 </resources>

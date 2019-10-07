@@ -10,7 +10,7 @@ public class MovieDetail {
     private String backdrop_path;
     private String voteAverage;
     private String voteCount;
-    private String original_title;
+    private String Title;
     private String release_date;
     private List<String> genreNames = new ArrayList<>();
     private String runtime;
@@ -63,11 +63,11 @@ public class MovieDetail {
     }
 
     public String getTitle() {
-        return original_title;
+        return Title;
     }
 
     public void setTitle(String title) {
-        this.original_title = title;
+        this.Title = title;
     }
 
     public String getYear() {

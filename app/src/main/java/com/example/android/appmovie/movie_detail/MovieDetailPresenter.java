@@ -34,10 +34,10 @@ public class MovieDetailPresenter extends BasePresenter implements MovieDetailCo
     }
 
     @Override
-    public void getListMovie(String name, final String page){
+    public void getListMovie(String id, final String page){
 
 
-        homeRepositoryImpl.getMovieList(name, page, new HomeRepository.MovieListaCallBack() {
+        homeRepositoryImpl.getMovieListDetail(id, new HomeRepository.MovieListaCallBack() {
             @Override
             public void onSuccess(ListMovie response) {
                 if(page.equals("1")){
