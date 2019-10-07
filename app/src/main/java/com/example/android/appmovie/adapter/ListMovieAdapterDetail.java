@@ -58,10 +58,6 @@ public class ListMovieAdapterDetail extends  RecyclerView.Adapter<RecyclerView.V
                 View viewItem = inflater.inflate(R.layout.movie_item_list, viewGroup, false);
                 viewHolder = new MovieViewHolderDetail(viewItem, this);
                 break;
-            case LOADING:
-                View viewLoading = inflater.inflate(R.layout.item_loading, viewGroup, false);
-                viewHolder = new LoadingViewHolderDetail(viewLoading, this);
-                break;
 
         }
         return viewHolder;
@@ -89,10 +85,10 @@ public class ListMovieAdapterDetail extends  RecyclerView.Adapter<RecyclerView.V
             case ITEM:
                 final MovieViewHolderDetail movieViewHolder = (MovieViewHolderDetail) viewHolder;
 
-                String url = String.format("http://image.tmdb.org/t/p/w185//%s", movieList.getMovie().get(position).getPoster());
+                String url = String.format("http://image.tmdb.org/t/p/w185//%s", movieList.getMovie().get(position).getPoster_path());
 
                 movieViewHolder.movieTitle.setText(movieList.getMovie().get(position).getTitle());
-                movieViewHolder.movieYear.setText(movieList.getMovie().get(position).getYear());
+                movieViewHolder.movieYear.setText(movieList.getMovie().get(position).getRelease_date());
                 Picasso.with(context).load(url).into(movieViewHolder.imageMovie);
 //
 //                String genres = String.join(", ", movieList.getMovie().get(position).getGenreNames());
@@ -101,30 +97,24 @@ public class ListMovieAdapterDetail extends  RecyclerView.Adapter<RecyclerView.V
                 movieViewHolder.view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        openDetailMovie.openMovieDetail(movieList.getMovie().get(position).getImdbID());
+                        openDetailMovie.openMovieDetail(movieList.getMovie().get(position).getId());
                     }
                 });
 
                 break;
 
-            case LOADING:
-                LoadingViewHolderDetail loadingVH = (LoadingViewHolderDetail) viewHolder;
-                loadingVH.mProgressBar.setVisibility(View.VISIBLE);
-                break;
         }
     }
 
     public void setMovieList(ListMovie listMovie) {
 
         this.movieList = listMovie;
-        System.out.println("PASSSOU PELO caaaaaaaaaaaaaaaTIAU PASSOUASOASASSA");
         notifyDataSetChanged();
     }
 
     public void setMovieDetail(MovieDetail movieDetail){
 
         this.movieDetail = movieDetail;
-        System.out.println("PASSSOU PELO PRINTAOAOAOAOA PASSOUASOASASSA");
         notifyDataSetChanged();
     }
 
@@ -166,17 +156,6 @@ public class ListMovieAdapterDetail extends  RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    protected class LoadingViewHolderDetail extends RecyclerView.ViewHolder {
-        private ProgressBar mProgressBar;
-
-        public LoadingViewHolderDetail(View itemView, ListMovieAdapterDetail adapter) {
-            super(itemView);
-
-            mProgressBar = itemView.findViewById(R.id.progress_bar_loading);
-
-        }
-
-    }
 
     protected class ItemDetailViewHolderDetail extends RecyclerView.ViewHolder {
         private ImageView bannerMovieDetail, posterMovieDetail;
@@ -199,22 +178,7 @@ public class ListMovieAdapterDetail extends  RecyclerView.Adapter<RecyclerView.V
 
     }
 
-    public void addLoadingFooter() {
-        isLoadingAdded = true;
-        add(new Movie());
-    }
 
-    public void removeLoadingFooter() {
-        isLoadingAdded = false;
-
-        int position = movieList.getMovie().size() - 1;
-        Movie movie = getItem(position);
-
-        if (movie != null) {
-            movieList.getMovie().remove(position);
-            notifyItemRemoved(position);
-        }
-    }
 
     public Movie getItem(int position) {
         return movieList.getMovie().get(position);

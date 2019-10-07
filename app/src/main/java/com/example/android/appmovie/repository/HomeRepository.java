@@ -20,4 +20,7 @@ public interface HomeRepository {
     interface MovieDetailCallBack extends CallBack<MovieDetail>{
 
     }
+
+   void getMovieListDetail(String id, MovieListaCallBack callBack);
+
 }

@@ -1,5 +1,7 @@
 package com.example.android.appmovie.Search;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.arch.lifecycle.ViewModelProviders;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,13 +37,13 @@ import com.example.android.appmovie.viewModel.SearchFragmentViewModel;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInsertFavorite, SearchContract.View{
+public class SearchFragment extends Fragment implements OnOpenDetailMovie, OnInsertFavorite, SearchContract.View {
 
 
     private SearchFragmentViewModel searchFragmentViewModel;
     private TextView textView;
-    private EditText editText;
-    Toast toast;
+    String teste;
+    private EditText editText,userAvarage;
     private boolean isLoading = false;
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView mRecyclerView;
@@ -48,11 +51,15 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
     private ImageView backButton;
     private ListMovieAdapter mAdapter;
     private Timer timer;
+    View view;
     private ProgressBar progressBar;
-    private int page =1;
+    private int page = 1;
     private String titleMovie;
+    private AlertDialog alerta;
     public static final String EXTRA_MESSAGE_OBJECT =
             "ID";
+    public static final String EXTRA_TILE_OBJECT =
+            "TITLE";
 
     private SearchContract.Presenter mPresenter;
 
@@ -67,12 +74,10 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         backButton = v.findViewById(R.id.back_search);
         progressBar = v.findViewById(R.id.progress_bar);
 
-        searchFragmentViewModel =  ViewModelProviders.of(this).get(SearchFragmentViewModel.class);
+        searchFragmentViewModel = ViewModelProviders.of(this).get(SearchFragmentViewModel.class);
         roomViewModel = ViewModelProviders.of(this).get(RoomViewModel.class);
 
         mPresenter = new SearchPresenter(this);
-
-
 
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -82,7 +87,6 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
                 if (timer != null) {
                     timer.cancel();
                 }
-
 
             }
 
@@ -100,17 +104,30 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
                     public void run() {
                         titleMovie = editText.getText().toString();
 
-//                        searchFragmentViewModel.init(editText.getText().toString(),"1");
-
-                        mPresenter.getListMovie(editText.getText().toString(),"1");
-
-
+                        mPresenter.getListMovie(editText.getText().toString(), "1");
 
                     }
                 }, 750);
             }
         });
 
+
+// Set an EditText view to get user input
+//        final EditText input = new EditText(getActivity());
+//        alert.setView(input);
+//
+//        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                // Do something with value!
+//            }
+//        });
+//
+//        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int whichButton) {
+//                // Canceled.
+//            }
+//        });
 
         mAdapter = new ListMovieAdapter(v.getContext());
         mRecyclerView = v.findViewById(R.id.recyclerview_search);
@@ -127,8 +144,7 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
             protected void loadMoreItems() {
                 isLoading = true;
                 page++;
-//                searchFragmentViewModel.init(titleMovie,String.valueOf(page));
-                mPresenter.getListMovie(titleMovie,String.valueOf(page));
+                mPresenter.getListMovie(titleMovie, String.valueOf(page));
 
             }
 
@@ -151,49 +167,54 @@ public class SearchFragment extends Fragment implements OnOpenDetailMovie,OnInse
         return v;
     }
 
-//    Observer<ListMovie> observerMovieList= new Observer<ListMovie>() {
-//        @Override
-//        public void onChanged(@Nullable ListMovie movieList) {
-//
-//
-//            if (page==1){
-//                mAdapter.setMovieList(movieList);
-//                mAdapter.addLoadingFooter();
-//            }
-//
-//            else if(page>1) {
-//                mAdapter.removeLoadingFooter();
-//                mAdapter.addAll(movieList);
-//                mAdapter.addLoadingFooter();
-//            }
-//
-////
-//
-//            isLoading = false;
-//            progressBar.setVisibility(View.INVISIBLE);
-//
-//        }
-//    };
 
     @Override
     public void openMovieDetail(String id) {
 
         Intent intent = new Intent(getActivity(), MovieDetailActivity.class);
         intent.putExtra(EXTRA_MESSAGE_OBJECT, id);
-
         startActivity(intent);
     }
 
     @Override
     public void insertFavorite(Movie movie) {
 
-       toast= Toast.makeText(getActivity(),
-                "Filmes adicionado aos favoritos", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 0);
-        toast.show();
+        alertUserAvarege(movie);
 
 
-        roomViewModel.insert(movie);
+    }
+
+
+    private void alertUserAvarege(final Movie movie){
+
+        String oi;
+        LayoutInflater li = getLayoutInflater();
+        view = li.inflate(R.layout.alert_user_avarage, null);
+
+        view.findViewById(R.id.bt_dimiss).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                //exibe um Toast informativo.
+                //desfaz o alerta.
+                alerta.dismiss();
+            }
+        });
+
+        view.findViewById(R.id.bt_accept).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View arg0) {
+                userAvarage =  view.findViewById(R.id.user_avarage);
+                teste = userAvarage.getText().toString();
+                movie.setVote_average(teste);
+                roomViewModel.insert(movie);
+                alerta.dismiss();
+
+            }
+        });
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Titulo");
+        builder.setView(view);
+        alerta = builder.create();
+        alerta.show();
     }
 
 
